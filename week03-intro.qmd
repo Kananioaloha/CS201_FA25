@@ -103,7 +103,7 @@ mtcars %>%
 
 `mtcars` is a classic, built-in dataset. If you've used R before, you've probably interacted with `mtcars`.
 
-Start by exploring the data below. It's always good to ensure you understand what is contained in your dataset.
+Start by exploring the data below. It's always good to ensure you understand what is contained in your dataset.oinsovmnksnvksikvn
 
 ```{r}
 data(mtcars) # reads in the data & adds it to your environment as a dataframe
