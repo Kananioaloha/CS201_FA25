@@ -1,6 +1,6 @@
 ---
 title: "Analyzing Penguins Data"
-author: "Amber Camp & Connor Flynn" & Kanani
+author: "Amber Camp & Connor Flynn & Kanani"
 date: 9/15/25
 format: html
 editor: visual
