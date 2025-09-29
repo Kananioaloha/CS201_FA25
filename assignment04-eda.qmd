@@ -1,0 +1,181 @@
+---
+title: "Assignment 4: Exploratory Data Analysis"
+author: "McKenzie Tim Sing"
+date: "`r Sys.Date()`"
+format: html
+editor: visual
+---
+
+## Overview
+
+Due: **Sunday, 9/28 11:59pm**
+
+In this assignment, you will practice Exploratory Data Analysis (EDA) by making plots from a **Kaggle dataset of your choice**.
+
+You will submit **at least 4 different plot types**, with short written interpretations for each.
+
+Part 1 is worth a total of 1 point, and Part 2 is worth 4 points (1 point for each plot & interpretation).
+
+## Part 1: Get Your Data
+
+1.  Go to [Kaggle Datasets](https://www.kaggle.com/datasets), create an account, and choose a dataset that interests you. Ensure your data has:
+    1.  At least 4 variables
+    2.  At least one categorical and one continuous variable
+    3.  I recommend data that contains at least 50-100 observations
+    4.  Tip: Open the CSV on Kaggle first and skim the columns to check that it meets these requirements
+2.  Download the dataset as a CSV file.
+3.  Place the CSV in your class R project data folder.
+4.  Read it into R with `read_csv()`.
+
+```{r, message=FALSE}
+library(tidyverse)
+
+
+if (!requireNamespace("janitor", quietly = TRUE)) {
+  install.packages("janitor")
+}
+library(janitor)
+
+
+stopifnot(file.exists("data/ScreentimevsMentalWellness.csv"))
+
+
+mydata <- read_csv("data/ScreentimevsMentalWellness.csv")|>
+  clean_names()
+
+glimpse(mydata)
+
+```
+
+### Describe your data
+
+Data author: Adharshini Kumaresan (\@adharshinikumar)
+
+Link: <https://www.kaggle.com/datasets/adharshinikumar/screentime-vs-mentalwellness-survey-2025?resource=download>
+
+Description: A 2025 survey (\~**400 participants**) about daily screen use and mental wellness (e.g., stress, sleep, productivity). Contains both categorical and numeric fields, suitable for mixed-type EDA. (Updated mid-September 2025; 1 CSV).
+
+### Preview your data
+
+Use some of the strategies you've learned in this class or picked up elsewhere to summarize and quickly explore your data.
+
+```{r}
+
+library(tidyverse)
+library(janitor)
+
+
+mydata <- read_csv("data/ScreentimevsMentalWellness.csv") |>
+  clean_names()
+
+
+glimpse(mydata)
+head(mydata, 10)
+
+
+names(mydata)
+colSums(is.na(mydata))
+```
+
+### Summary stats
+
+Before you make plots, you must also:
+
+-   Show basic summaries of your dataset, including:
+
+    -   `count()` for categorical variables (to see category frequencies)
+
+    -   `mean()`, `median()`, `sd()`, `min()`, `max()` for at least one numeric variable
+
+```{r}
+library(tidyverse)
+
+names(mydata)
+
+cat_var <- "gender"
+num_var <- "daily_screen_time_hours"
+
+mydata %>%
+  count(.data[[cat_var]]) %>%
+  arrange(desc(n))
+
+```
+
+Write 2–3 sentences here: What do the category counts tell you? What does the numeric summary show about spread, center, or outliers?
+
+-   Most people in my data are female 222, then make 170, and only 8 are non-binary/other, so the groups are not even. For a number column like screen_time_hours, the average is higher than the median and the range stretches pretty high. That tells me that the data is a bit right-skewed a few heavy screen-time users are pulling the average up.
+
+## Part 2:
+
+Create **at least 4 plots**, each of a different type. At least one of your four plots must use different variables than the others.
+
+Each plot should have:
+
+-   A title and labeled axes
+
+-   A short interpretation (2-3 sentences) underneath
+
+Use the EDA Part 3 notes as your reference. Since this is an EDA assignment, your plots can be plain, but consider adding colors, themes, or interactivity for interpretability and visual appeal if you know how.
+
+```{r}
+library(tidyverse)
+if (!requireNamespace("plotly", quietly = TRUE)) install.packages("plotly")
+library(plotly)
+```
+
+### Plot 1
+
+```{r}
+# insert code here
+
+p1 <- ggplot(mydata, aes(x = gender, fill = gender)) +
+  geom_bar() +
+  labs(title = "Counts by Gender", x = "Gender", y = "Count")
+ggplotly(p1)
+```
+
+Interpretation: Most responses are female, then male, with very few non-binary/other. Group sizes are uneven, so comparisons by gender should be cautious.
+
+### Plot 2
+
+```{r}
+# insert code here
+
+p2 <- ggplot(mydata, aes(x = screen_time_hours)) +
+  geom_histogram(bins = 30, fill = "steelblue", color = "white") +
+  labs(title = "Distribution of Daily Screen Time", x = "Screen Time (hours)", y = "Number of People")
+
+ggplotly(p2)
+```
+
+Interpretation: The distribution is a bit right-skewed (more people with lower to mid hours, a few with very high hours). Those high-hour cases can pull the average up.
+
+### Plot 3
+
+```{r}
+# insert code here
+
+p3 <- ggplot(mydata, aes(x = gender, y = stress_level_0_10, fill = gender)) +
+  geom_boxplot() +
+  labs(title = "Stress Level by Gender", x = "Gender", y = "Stress (0–10)")
+ggplotly(p3)
+```
+
+Interpretation: All three groups report fairly high stess(most between \~7 and 10). The male groupʻs median looks a little higher than female, and non-binary/other is similar to female but has a very small amount of people (n=8). Each group has a few low outliers, but overall the spreads look similar.
+
+### Plot 4
+
+```{r}
+# insert code here
+
+p4 <- ggplot(mydata, aes(x = screen_time_hours, y = mental_wellness_index_0_100, color = gender)) +
+  geom_point(alpha = 0.7) +
+  labs(title = "Mental Wellness vs. Screen Time", x = "Screen Time (hours)", y = "Mental Wellness (0–100)")
+ggplotly(p4)
+```
+
+Interpretation: Theres a clear down pattern as screen time increases, mental wellness tends to go down. High wellness scores seems to happen when scree time is under \~6 hours, but at 9-10 + hours wellness is usually very low. Itʻs a correlation, not proof of cause and effect.
+
+## Push to GitHub to Submit!
+
+Assignment is due Sunday 9/28 at 11:59 pm.
