@@ -196,5 +196,22 @@ Have this done before class on Wednesday.
 write_parquet(teds_d, here("data/teds_d_clean.parquet"))
 ```
 
-```{}
+```         
+```
+
+```{r}
+library(here); library(arrow); library(janitor); library(dplyr)
+
+# make sure data/ exists
+dir.create(here("data"), showWarnings = FALSE)
+
+# read the lecture file, clean names, assign to teds_d
+teds_d <- read_parquet(here("data", "teds_d_lecture.parquet")) %>%
+  clean_names()
+
+# (optional: do your recodes here)
+
+# save the clean file for Wednesday
+write_parquet(teds_d, here("data", "teds_d_clean.parquet"))
+
 ```
